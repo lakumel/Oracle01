@@ -105,7 +105,6 @@ values('오늘', '날씨');
 select *from test01;
 
 -- 실제 테이블의 글자수를 읽어보기
-
 select * from employee;
 
 select ename , length(ename) as 이름의글자수
@@ -125,7 +124,8 @@ from employee;
     
 */
 
-select 'Oracle', 'mania' ,concat('Oracle','mania')
+select 'Oracle', 'mania' ,
+        concat('Oracle','mania')
 from dual;
 
 select * from employee;
@@ -133,19 +133,25 @@ select * from employee;
 select ename, job,concat(ename, job) as 컬럼연결 from employee;
 
 --substr : 문자열을 잘라오는 함수 : substr(컬럼, 4,3) -- 컬럼의 4번째 자리에서 3자를 잘라와서 출력
-select substr('Oracle mania', 4,3)
-from dual;
+select substr('Oracle mania', 4,3)  
+from dual; 
 
-select substr('오라클 매니아', 4,3)
+select substr('오라클 매니아', 5,3)
+from dual; 
+
+select substrb('Oracle mania', 4,3)  
+from dual; 
+
+select substrb('오라클 매니아', 4,3)
 from dual;
 
 --실제 테이블에서 사용
 
-select * from employee;
+select * from employee; 
 
-select hiredate, substr(hiredate, 1,2) as 연도만출력, substr(hiredate, 4,2) as 월만출력
-,substr(hiredate, 7,2) as 일만출력
-from employee;
+select  hiredate, substr(hiredate, 1,2)  as 연도만출력 , substr(hiredate, 4,2)  as 월만출력
+        , substr(hiredate, 7,2)  as 일만출력
+from employee ; 
 
 --INSTR : 특정 문자의 위치를 출력
 --Oracle mania에서 a라는 단어가 들어간 자리수 : 3
@@ -189,32 +195,29 @@ select '             Oracle  mania          ' as 원본,
     TRIM('             Oracle  mania          ') as 앞뒤공백제거
 from dual;
 
-/*2.숫자함수*/
+/* 2. 숫자함수  
+    ROUND : 특정 자릿수에서 반올림 처리 하는 함수    <== 연산시 소점자리를 반올리해서 처리 
+            5이상은 반올림 , 5이하는 없앰. 
+    ROUND (대상) : 소숫점 뒷자리에서 반올림. 
+    ROUND (대상, 소숫점자릿수) : 
+        - 양수일때 : 소숫점 기준으로 오른쪽으로 이동해서 반올림 , 그 자릿수 뒤에서 반올림  <== 주의 
+        - 음수일때 : 소숫점 기준으로 왼쪽으로 이동해서 반올림, 그 자리에서 반올림됨 
 
+    TRUNC : 특정 자릿수에서 잘라서 버림 
+    MOD  : 나머지 값만 반환 
+*/ 
 
-/*
-    ROUND   : 특정 자릿수에서 반올림 처리 하는 함수 <==연산시 소수점 자리를 반올림해서 처리
-    
-    ROUND (대상) : 소숫점 뒷자리에서 반올림.
-    ROUND (대상, 소숫점자릿수) :
-        - 양수일때 : 소숫점 기준으로 오른쪽으로 이동해서 반올림, 그 자릿수 뒤에서 반올림 <==주의
-        - 음수일때 : 소숫점 기준으로 왼쪽으로 이동해서 반올림, 그 자리에서 반올림됨.
-    
-    TRUNC   : 특정 자릿수에서 잘라서 버림
-    MOD     : 나머지 값만 반환
-*/
+select 98.7654 as 원본 , 
+        round (98.7654),         -- 99 
+        round (98.7654, 2),      -- 98.77 소숫점 오른쪽으로 2자리이동후 그 뒤에서 반올림 
+        round (98.7654, -1),     -- 100   소숫점 왼쪽으로 1자리 이동후 그 자리에서 반올림 
+        round (98.7654, -2),     -- 100
+        round (98.7654, -3),      -- 0 
+        round (98.7654, 3)        -- 98.765  소숫점 오른쪽으로 3자리이동후 그 뒤에서 반올림   
+from dual; 
 
-select 98.7654 as 원본,
-        round(98.7654),           -- 99
-        round(98.7654,2),          -- 소수점 오른쪽으로 2자리 이동후 그 뒤에서 반올림  
-        round(98.7654,-1),           -- 100  소숫점 왼쪽으로 1자리 이동후 그 자리에서 반올림
-        round(98.7654,-2),            --100
-        round(98.7654,-3),               --0
-        round(98.7654,3)                --98.765 소수점 오른쪽으로 3자리 이동후 그 뒤에서 반올림
-from dual;        
-
-select ROUND(1234/34,2)
-from dual;
+select ROUND(1234/34, 2 ) 
+from dual; 
 
 select * from employee;
 
@@ -222,13 +225,12 @@ select * from employee;
 select salary, salary*0.033 as 근로소득세
 from employee;
 
---TRUNC : 특정 자리에서 버림.
-
-select trunc(98.7654),       -- 98 소숫점 뒤는 모두 버림
-        trunc(98.7654,2 ),      --98.76        소수점 2자리 그 뒤는 모두 버림
-        trunc(98.7654, -1),      -- 90       소수점 왼쪽으로 1자리 이동 후 버림
-        trunc(98.7654, 1)       --98.7      
-from dual;
+-- TRUNC : 특정 자릿에서 버림. 
+select trunc(98.7654),       -- 98 소숫점 뒤는 모두 버림 
+        trunc(98.7654, 2 ),   -- 98,76    소숫점 2자리 그 뒤는 모두 버림 
+        trunc(98.7654, -1 ),   -- 90       소숫점 왼쪽으로 1자리이동후 버림 
+        trunc(98.7654, 1 )     -- 98.7
+from dual ; 
 
 --MOD(대상, 나누는 수):대상을 나누는 수로 나누어서 나머지만 출력
 
@@ -236,124 +238,85 @@ from dual;
 select trunc(31/2) as 몫만출력, MOD(31,2) as 나머지만출력
 from dual;
 
-select * from employee;
-/*order by 에서 두개 이상의 컬럼이 정렬 될때*/
-select *
+select * from employee; 
+/* order by 에서 두 개이상의 컬럼이 정렬될때   */ 
+select * 
 from employee
-order by job asc;
---job asc, ename desc
---두개 이상의 컬럼이 정렬될때, job 컬럼을 정렬 후,job 컬럼의 중복된 값에 대해서 ename desc 정렬됨
-select *
+order by job asc ; 
+
+-- job asc, ename desc 
+-- 두개 이상의 컬럼이 정렬될때, job 컬럼을 정렬후, job 컬럼의 중복된 값에대해서 ename desc 정렬됨 
+select * 
 from employee
-order by job asc, ename desc;
+order by job asc, ename desc ; 
 
-select *
+select * 
 from employee
-order by dno desc, ename asc;
+order by dno desc, ename asc; 
 
-/*
-    날짜 함수
-    SYSDATE:현재 시스템의 날짜를 출력하는 함수
-    MONTHS_BETWEEN : 두 날짜 사이의 개월 수를 출력
-    ADD_MONTHS : 특정 날짜에 개월 수를 더할 때 사용
-    NEXT_DAY : 특정 날짜에서 초래하는 요일을 인자로 받아서 요일이 도래하는 날짜를 출력
-    LAST_DAY : 달의 마지막 날짜를 반환
-    ROUND : 날짜를 반올림하는 함수, 15일이상: 반올림, 15미만: 삭제
-    TRUNC : 날짜를 잘라내는 함수
-*/
+/* 날짜 함수 
+    SYSDATE : 현재 시스템의 날짜를 출력 하는 함수, 
+    MONTHS_BETWEEN : 두 날짜 사이의 개월 수를 출력 
+    ADD_MONTHS : 특정 날짜에 개월수를 더할때 사용 
+    NEXT_DAY : 특정 날짜에서 초래하는 요일을 인자로 받아서 요일이 도래하는 날짜를 출력 
+    LAST_DAY : 달의 마지막 날짜를 반환 
+    ROUND : 날짜를 반올림 하는 함수, 15일이상 : 반올림, 15미만 : 삭제 
+    TRUNC : 날짜를 잘라내는 함수   
+*/ 
+-- 현재 시스템의 날짜를 출력 : 년/월/일 
+select sysdate 
+from dual; 
 
---현재 시스템의 날짜를 출력 : 년/월/일
+select sysdate - 1 as 어제, sysdate as 오늘, sysdate + 1 as 내일
+from dual; 
 
-select sysdate
+select * from employee; 
+-- 입사일로부터 오늘날짜까지 몇일 근무했는지 출력 
+select ename 이름, hiredate 입사일, Round(sysdate - hiredate) 총근무일수 
+from employee; 
+
+-- 입사일로 부터 1000일 지난 시점의 날짜를 출력. 
+select ename 이름, hiredate 입사일, hiredate + 1000 입사천일날짜 
+from employee; 
+
+-- 특정날짜에서 월을 기준으로 출력 
+select hiredate as 원본, trunc ( hiredate, 'MONTH') , ROUND (hiredate, 'MONTH')
+from employee; 
+
+-- months_between : 두 날짜 사이의 개월 수를 출력 
+-- 입사일로 부터 현재까지의 근무한 개월수를 출력 
+select ename, hiredate , trunc (months_between( sysdate, hiredate)) as 근무개월수 
+from employee
+
+-- date (날짜타입) 
+-- add_months (날짜, 개월수) : 날짜에 개월수를 더하는 함수 
+-- 오늘날짜에 100개월을 더한 날짜
+select sysdate as "오늘날짜", add_months (sysdate , 100) as "100개월후" , sysdate + 100 as "100일후"
 from dual;
 
-select sysdate -1 as 어제, sysdate as 오늘, sysdate +1 as 내일
-from dual;
+-- 입사후 6개월이 지난 시점을 출력 
+select ename, hiredate , add_months(hiredate, 6) as "입사후6개월시점"
+from employee; 
 
-select * from employee;
+-- next_day : 특정날짜에서 요일을 인풋으로 넣어서 도래하는 요일의 날짜를 출력 
+select next_day (sysdate, '월요일')
+from dual; 
 
---입사일로 부터 오늘날짜까지 몇일 근무했는지 출력
-select ename 이름, hiredate 입사일,Round(sysdate - hiredate) 총근무일수
-from employee;
+-- last_day (date) : date의 마지막 날짜 를 출력 
+select sysdate as 오늘날짜, last_day(sysdate)   
+from dual; 
 
---입사일로 부터 1000일 지난 시점의 날짜를 출력.
-select ename 이름, hiredate 입사일, hiredate + 1000 입사천일날짜
-from employee;
+-- 사원테이블에서 입사일의 마지막 날짜를 출력 
+select hiredate as 입사일, last_day(hiredate)
+from employee; 
 
---특정날짜에서 월을 기준으로 출력
-select hiredate as 원본, trunc(hiredate, 'MONTH'),ROUND(hiredate,'MONTH')
-from employee;
+/* 형식 변환 함수 
+    TO_CHAR : 날짜, 숫자형을 문자형으로 변환 
+    TO_DATE : 문자형을 날짜형으로 변환 
+    TO_NUMBER : 문자형을 숫자로 변환 
+*/ 
 
+-- TO_CHAR (date, 'YYYYMMDD') : 날짜형식을 'YYYYMMDD' 형식으로 뽑아와서 char 타입으로 변환 
 
---months_between:두 날짜 사이의 개월 수를 출력
---입사일로 부터 현재까지의 근무한 개월수를 출력
-select ename, hiredate, trunc(months_between(sysdate, hiredate)) as 근무개월수
-from employee;
-
---date(날짜타입)
---add_months(날짜, 개월수) : 날짜에 개월수를 더하는 함수
---오늘날짜에 100개월을 더한 날짜
-select sysdate as "오늘날짜",add_months(sysdate , 100) as "100개월후",sysdate + 100 as "100일후"
-from dual;
-
---입사후 6개월이 지난 시점을 출력
-select ename, hiredate, add_months(hiredate,6) as "입사후6개월시점"
-from employee;
-
--- next_day : 특정날짜에서 요일을 인풋으로 넣어서 도래하는 요일의 날짜를 출력
-select next_day(sysdate,'금요일')
-from dual;
-
---last_day(date) : date의 마지막 날짜를 출력
-select sysdate as 오늘날짜, last_day(sysdate)
-from dual;
-
---사원테이블에서 입사일의 마지막 날짜를 출력
-select hiredate as 입사일,last_day(hiredate)
-from employee;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+select TO_CHAR (sysdate, 'YYYYMMDD') 
+from dual; 

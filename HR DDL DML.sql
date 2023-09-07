@@ -1,32 +1,29 @@
 
-
 /*DDL, DML, 제약 조건*/
-
 /*
-    SQL(Structured Query Language):에스큐엘, 씨퀄, 구조화된 질의 언어
+SQL ( Structured Query Language) : 에스큐엘, 씨퀄, 구조화된 질의 언어 
 
 select 컬럼명
 from 테이블명[뷰]
 where 조건
 group by 컬럼[그룹핑]
-having 조건[group by 결과의 조건]
-order by 정렬컬럼
+having 조건[group by 결과의조건]
+order by 정렬컬럼 
 
-SQL : 구문의 종류를 분류
+SQL 구문의 종류를 분류 
 
-DDL : (Data Definition Language) : 객체(테이블, 함수, 뷰, 트리거, 저장프로시져, 인덱스, 기타등등)를 생성하는 언어(구문)
-                                 : 스키마(틀,객체)를 생성하는 언어
-        --create(생성), alter(수정), drop(삭제)
-        
-DML : (Data Manipulation Language) : 테이블의 레코드를 조작언어<==트랜잭션을 발생 시킴(commit, rollback)
-   --오라클에서는 트랜잭션 시작은 자동으로 작동됨.
-   --트랜잭션을 완료 해야 한다.(commit, rollback)  
-   <==트랜잭션을 완료하지 않으면 LOCK 이 걸려서 다른 사용자가 접근이 안됨
-    -insert(입력), update(수정), delete(삭제)
+DDL (Data Definition Language)  : 객체(테이블, 계정,  함수, 뷰, 트리거, 저장프로시져, 인덱스, )를 생성하는 언어(구문)
+                                : 스키마(틀, 객체) 를 생성하는 언어 
+    - create (생성), alter (수정), drop (삭제) 
     
-DCL : (Data Controller Language) : 데이터 제어 언어, 계정에 권환을 부여, 수정, 제거
-    --grant(권한을 부여), revoke(권한을 취소)
+DML (Data Manipulation Language) : 테이블의 레코드(값)를 조작 언어 <== 트랜잭션을 발생 시킴 (commit, rollback) 
+    -- 오라클에서는 트랜잭션 시작은 자동으로 작동됨. 
+    -- 트랜잭션을 완료 해야한다. ( commit , rollback)  
+        <== 트랜잭션을 완료하지 않으면 LOCK 이 걸려서 다른 사용자가 접근이 안됨
+    - insert (입력), update (수정), delete (삭제)
     
+DCL (Data Control Language) : 데이터 제어 언어, 계정에 권한을 부여,수정,제거 
+    - grant (권한을 부여), revoke (권한을 취소) 
 =======================================================
 
 DQL : (Data Query Language) : 데이터 질의 언어(출력), 
@@ -38,9 +35,7 @@ TCL : (Transaction Control Language):트랜잭션 제어 언어, <== DML에서 발생됨
     -- rollback [transction] : 트랜잭션을 시작시점으로 되돌림.
 
     --savepoint : 트랜잭션의 임시 저장 시점 설정
-
 */
-
 
 --테이블 생성 : create table
 
@@ -69,12 +64,13 @@ select * from dept;
 트랜잭션(Transaction : 작업(일)을 처리하는 최소 단위
     -- DBMS : 네트워크를 통해서 여러명의 사용자가 동시에 작업
     -- 작업을 할때 LOCK을 걸고 완료되면 LOCK을 풀어준다.
-    --DML 문에서 작동,
-    -- 트랜잭션을 종료하기 전까지는 Lock이 걸려서 다른 사용자의 접근을 차단
+    -- DML 문에서 작동,
+    -- 트랜잭션을 종료(commit, rollback)하기 전까지는 Lock이 걸려서 다른 사용자의 접근을 차단
     -- commit : RAM의 수정된 내용을 DB에 영구적으로 저장
     -- rollback : 트랜잭션 시작 시점으로 되돌림.
     -- commit 전까지는 RAM 에서만 적용되어 있음.
-    
+     -- log에 기록됨, "트랜잭션 로그"    <==백업시점이 아니라 오류시점까지 복구
+     
     -- 트랜잭션의 4가지 특징
          --ALL or NOTHING : 되면 전부 되게 하거나 아니면 원래로 되돌리거나
     
@@ -82,17 +78,12 @@ select * from dept;
             -- 일관성(Consistency) : 트랜잭션 에서 처리한 결과는 일관성을 가지고 있다.
             -- 독립성(Isolation) : 하나의 트랜잭션은 다른 트랜잭션과 격리, LOCK
             -- 지속성(durability) : commit 트랜잭션은 DB에 영구히 저장된다.
-            -- log에 기록됨, "트랜잭션 로그"    <==백업시점이 아니라 오류시점까지 복구
-            
-    
-    
-         
+
         A가 B에게 100억 입금 예 : 두 update 구문이 하나의 트랜잭션으로 작동되어야함.
         
         1.update 문을 사용해서 A 통장 100억을 출금
         
         2.update 문을 사용해서 B 통장 100억을 입금
-
 */
 
 --insert 문
@@ -141,26 +132,27 @@ where dno = 40;
 commit;
 
 /*
-제약 조건 : 컬럼에 부여되는 제약,primary key, unique ,Not null, Check,Foreign Key/,default
+제약 조건 : 컬럼에 부여되는 제약,primary key, unique ,Not null, Check,Foreign Key,/default
       특정 컬럼에 무결성을 확보하기 위해서 부여
     Primary Key :
             --중복된 값을 넣지 못하도록 설정
             -- NOT NULL
             -- 테이블에 한번만 넣을 수 있다. 여러 컬럼에 하나의 Primary Key를 넣을 수 있다.
-            --INDEX 가 자동으로 생성된다.    <==검색을 빠르게 함.
+            -- INDEX 가 자동으로 생성된다.    <==검색을 빠르게 함.
             --update, delete 시 where절에서 사용되는 컬럼
             -- JOIN 시 On 절에서 사용되는 컬럼
          Unique:
             -- 중복된 값을 넣을 수 없다.
-            -- null             <== 1번만 넣을 수 있다.
+            -- null       <== 1번만 넣을 수 있다.
             -- not null컬럼에도 생성 가능
             -- 하나의 테이블에 여러번 넣을 수 있다.
             -- INDEX 가 자동으로 생성됨     <== 검색을 빠르게 함.
             -- --update, delete 시 where절에서 사용되는 컬럼
+             -- JOIN 시 On 절에서 사용되는 컬럼
        Not null 
             --반드시 값이 입력되어야 한다. NULL을 넣을 수 없도록
       Check
-            -- 컬럼에 들어오는 값을 체크해서 저장,조건에 만족하는 값만 넣도록         age>0 
+            -- 컬럼에 들어오는 값을 체크해서 저장,조건에 만족하는 값만 넣도록        age>0 
       Foreign Key
             -- 부모테이블의 특정 컬럼을 참조해서 값을 넣을 수 있도록 설정
             -- 부모 테이블의 참조 하는 컬럼은 primary Key, Unique 키 컬럼을 참조
@@ -171,56 +163,52 @@ commit;
       데이터 사전 : 오라클에서 테이블에 대한 각종 정보를 저장한 테이블
             user_constraints                        -- 제약 조건을 확인하는 데이터 사전
             select * from user_constraints
-
 */
 
-create table member1(
-    id varchar2(50) not null primary key,
-    pass varchar2(50) not null,
-    addr varchar2(100) null,
+create table member1 (
+    id varchar2(50) not null Primary key, 
+    pass varchar2(50) not null , 
+    addr varchar2(100) null, 
     phone varchar2(30) null,
-    age number (3),             -- 정수 3자리    
-    weight number(5,2)          -- 실수 : 전체 5자리, 소숫점이하 2자리  
-);
+    age number (3) ,        -- 정수 3자리
+    weight number(5,2)      -- 실수 : 전체 5자리, 소숫점이하 2자리 
+); 
 
---Insert
+-- Insert 
 insert into member1 
-values('ddd','aaa','서울','010-1111-1111',20,70.55);
+values ( 'ddd', 'aaa', '서울', '010-1111-1111', 20, 70.55); 
 
-select * from member1;
+select * from member1; 
 
+commit ; 
 
-commit;
+-- update 시 where 조건에 primary key 컬럼을 조건으로 처리 
 
---update 시 where 조건에 primaty key 컬럼을 조건으로 처리
+update member1 
+set addr = '부산', phone = '010-2222-2222', age = 30, weight = 88.55
+where id = 'bbb' 
 
-update member1
-set addr='부산', phone='010-2222-2222',age=30,weight=88.55
-where id ='bbb'
-
-select * from member1
-
---delete 시 where 조건에 primaty key 컬럼을 조건으로 처리
+-- delete 시 where 조건에 primary key 컬럼을 조건으로 처리
 delete member1
-where id = 'ccc';
+where id ='ccc'; 
 
-/*Unique*/
+/* Unique */ 
 
-create table member2(
-    id varchar2(50) not null primary key,
-    pass varchar2(50) not null Unique,
-    addr varchar2(100) null,
+create table member2 (
+    id varchar2(50) not null Primary key, 
+    pass varchar2(50) not null Unique , 
+    addr varchar2(100) null , 
     phone varchar2(30) null Unique,
-    age number (3),                
-    weight number(5,2)          
-);
+    age number (3) ,        
+    weight number(5,2)      
+); 
 
---Insert
+-- Insert 
 insert into member2 
-values('bbbb','bbbbb','서울','010-2222-2222',10,70.55);
+values ( 'bbbb', 'bbbbb', '서울', '010-2222-2222', 10, 70.55); 
 
-select * from member2;
-commit;
+select * from member2; 
+commit; 
 
 -- 오라클의 데이터 사전을 사용해서 member2 테이블의 제약 조건을 확인
 show user;    -- 현재 접속한 계정 정보를 출력 : C##HR
@@ -241,49 +229,48 @@ create table member3(
     weight number(5,2)          
 );
 
-insert into member3 
-values('bb','bb','서울','010-1111-2222',10,70.55);
+-- Insert 
+insert into member3
+values ( 'bb', 'bb', '서울', '010-1111-2222', 10, 70.55); 
 
+select * from member3; 
+commit; 
 
-select * from member3;
-commit;
-
-/*check : 컬럼의 값을 체크*/
-
-create table member4(
-    id varchar2(50) not null constraint PK_MEMBER4_ID primary key,
-    pass varchar2(50) not null constraint U_MEMBER4_PASS Unique,
-    addr varchar2(100) null,
+/* check : 컬럼의 값을 체크 */ 
+create table member4 (
+    id varchar2(50) not null constraint PK_MEMBER4_ID Primary key, 
+    pass varchar2(50) not null constraint U_MEMBER4_PASS Unique , 
+    addr varchar2(100) null , 
     phone varchar2(30) null constraint U_MEMBER4_PHONE Unique,
-    age number (3) constraint CK_MEMBER4_AGE  check(age > 0 and age < 150 ),
-    gender char(1)  constraint CK_MEMBER4_GENDER check(gender in('W','M')), 
-    weight number(5,2)          
-);
+    age number (3)  constraint CK_MEMBER4_AGE   check ( age > 0 and age < 150 )  ,  
+    gender char(1)  constraint CK_MEMBER4_GENDER   check( gender in ('W', 'M') ) , 
+    weight number(5,2)      
+); 
 
 --제약 조건 출력
 
 select * from user_constraints
 where table_name = 'MEMBER4';
 
-insert into member4 
-values('b','b','서울','010-1111-2222',70,'M', 70.55);
+-- Insert 
+insert into member4
+values ( 'b', 'b', '서울', '010-1111-2222', 70, 'M', 70.55); 
 
-
-select * from member3;
-commit;
+select * from member4; 
+commit; 
 
 /* Default: 값을 넣지 않으면 default 로 설정된 값이 자동으로 들어감*/
 
-create table member5(
-    id varchar2(50) not null constraint PK_MEMBER5_ID primary key,
-    pass varchar2(50) not null constraint U_MEMBER5_PASS Unique,
-    addr varchar2(100) default '서울' null,
+create table member5 (
+    id varchar2(50) not null constraint PK_MEMBER5_ID Primary key, 
+    pass varchar2(50) not null constraint U_MEMBER5_PASS Unique , 
+    addr varchar2(100)  default '서울' null , 
     phone varchar2(30) null constraint U_MEMBER5_PHONE Unique,
-    age number (3) null constraint CK_MEMBER5_AGE  check(age > 0 and age < 150 ),
-    gender char(1) null constraint CK_MEMBER5_GENDER check(gender in('W','M')), 
-    weight number(5,2) default 10.00 null,
+    age number (3) null  constraint CK_MEMBER5_AGE   check ( age > 0 and age < 150 )  ,  
+    gender char(1) null constraint CK_MEMBER5_GENDER   check( gender in ('W', 'M') ) , 
+    weight number(5,2) default 10.00 null  , 
     hiredate date default sysdate
-);
+); 
 
 drop table member5;
 
@@ -311,8 +298,9 @@ select * from department;       --부서 정보를 저장하는 테이블(부모 테이블) dno
 select * from employee;         -- 사원 정보를 저장하는 테이블 (자식 테이블 : Foreign Key(dno))
 
 desc employee;
---employee의 dno 컬럼은 department의 dno를 참조함
 
+
+--employee의 dno 컬럼은 department의 dno를 참조함
 insert int employee(eno, ename, job, manager, hiredate, salary, commission, dno)
 values(8000, 'PJW' , 'MANAGER',7369,sysdate, 1000, 100,10);
 
@@ -346,45 +334,47 @@ values(40,'송길동',52, 'M');
 
 commit;
 
-select * from ChildTbl;
+select * from ParentTbl; 
 
-select * from ParentTbl;
+-- 자식 테이블 생성 ( FK ) 
+create table ChildTbl (
+    id varchar2(40) constraint PK_ChildTbl_id Primary Key,
+    pw varchar2(40), 
+    info number, 
+        constraint FK_ChildTbl_info foreign key (info) references ParentTbl(info)
+); 
 
---자식 테이블 생성(FK)
+-- 자식 테이블의 더미 데이터 입력 
+insert into ChildTbl ( id, pw, info ) 
+values ( 'aaa', 'aaa', 10); 
 
-create table ChildTbl(
-id varchar2(40) constraint PK_ChildTbl Primary Key,
-pw varchar2(40),
-info number,
-constraint FK_ChildTbl_info foreign key(info) references ParentTbl(info)
-);
+insert into ChildTbl ( id, pw, info ) 
+values ( 'bbb', 'aaa', 10); 
 
---자식 테이블의 더미 데이터 입력
-insert into ChildTbl (id, pw,info)
-values('aaa','aaa',10);
+insert into ChildTbl ( id, pw, info ) 
+values ( 'ccc', 'aaa', 30); 
 
-insert into ChildTbl (id, pw,info)
-values('bbb','aaa',10);
+insert into ChildTbl ( id, pw, info ) 
+values ( 'ddd', 'aaa', 40); 
 
-insert into ChildTbl (id, pw,info)
-values('ccc','aaa',30);
+commit; 
 
-insert into ChildTbl (id, pw,info)
-values('ddd','aaa',40);
+select * from ChildTbl; 
 
---  FK가 참조하는 부모테이블은 drop 되지 않는다.
-        --1.자식 테이블을 먼저 삭제후 부모 테이블 삭제
-        --2.부모 테이블을 삭제하면서 cascade 옵션을 사용하면 강제 삭제 된다.
+-- FK 가 참조하는 부모 테이블은 drop 되지 않는다. 
+    -- 1. 자식 테이블을 먼저 삭제후 부모 테이블 삭제 
+    -- 2. 부모 테이블을 삭제하면서 cascade constraints 옵션을 사용하면 강제 삭제 된다. 
 
--- 부모 테이블 삭제 되지 않는다.
-drop table ParentTbl;
+-- 부모 테이블 삭제 되지 않는다.    
+drop table ParentTbl ; 
 
---1.자식테이블을 먼저 제거후 부모 테이블 삭제
-drop table ChildTbl;
-drop table ParentTbl;
+-- 1. 자식테이블을 먼저 제거후 부모 테이블 삭제 
+drop table ChildTbl; 
+drop table ParentTbl ;
 
-2.부모테이블을 삭제하면서 cascade 옵션을 사용하면 강제 삭제 된다.
-drop table ParentTbl cascade constraints;
+-- 2. 부모 테이블을 삭제하면서 cascade 옵션을 사용하면 강제 삭제 된다. 
+drop table ParentTbl cascade constraints ; 
+
 
 
 

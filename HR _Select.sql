@@ -1,6 +1,7 @@
-/* Select 문 */
+/*  Select 문  */ 
 
-/*테이블의 모든 컬럼을 출력*/
+/* 테이블의 모든 컬럼을 출력 */  
+
 
 select * from Employee;        -- 사원 정보가 저장된 테이블
 
@@ -30,7 +31,6 @@ select * from Salgrade;         -- 연봉에 대한 등급이 저장됨
   */
   
 /* SALGRADE 테이블의 컬럼(필드) 구조 */
-  
   /*
     GRADE:등급
     LOSAL:최소 월급
@@ -72,9 +72,9 @@ from employee;
  -- WHERE 조건사용하기 
 select * from employee; 
 
--- 이름이 JAMES 인 사원의 이름과 직책, 입사월  부서번호 출력 하기
--- select , SELECT, FROM,from, WHERE, where
--- 컬럼에 저장된 값(레코드)을 가져올때 대소문자를 구분함.
+--이름이 JAMES 인 사원의 이름과 직책, 입사월, 부서번호 출력 하기 
+-- SELECT , select, FROM , from , WHERE, where 
+-- 컬럼에 저장된 값(레코드) 을 가져올때 대소문자를 구분함.  
 
 select ename 이름, job 직책, hiredate 입사년월일, dno 부서번호
 from employee
@@ -92,7 +92,6 @@ where ename in('JAMES', 'SMITH');
 
 -- where 절에서 비교 연산자 사용하기 : > , < , >= , <=
 -- 연봉이 1500이상인 사용자만 출력
-
 select *
 from employee
 where salary >= 1500;
@@ -109,8 +108,7 @@ where salary >=1500 and dno = 30;
 /*
     NUMBER(4) : 정수 4자리 까지만 넣을 수 있다.
     NUMBER(7,2) : 실수(전체 7자리, 소수점 이하 2자리)
-    
-    
+
     CHAR(10) : 문자 10byte    <=== 자리수를 알수 있는 경우
         varchar2 보다 성능이 빠르다. 하드 공간 낭비가 있을 수 있다.
         주민번호(13), 비밀번호 4자리만 들어간다.
@@ -130,7 +128,6 @@ select * from employee;
 -- CHAR, VARCHAR2, DATE 값을 가져올때 ''를 붙여야 함
 
 --직책이 영업사원(SALESMAN)이고 연봉이 1500 이상 3000미만인 사원의 이름만 출력해보기
-
 select *
 from employee
 where job = 'SALESMAN' and (salary >=1500 and salary<3000);
@@ -157,11 +154,9 @@ where manager is null;
 
 /*날짜 검색 하기*/
 -- 입사 날짜가 81/02/20 일날 입사한 사원의 이름과 직책과 월급, 입사일을 출력
-
 select ename as 이름, job as 직책, salary 월급, hiredate as 입사일
 from employee
 where hiredate='81/02/20';
-
 
 -- 81년도에 입사한 사용자만 출력
 select * from employee;
@@ -170,11 +165,9 @@ select *
 from employee
 where hiredate > '81/01/01' and hiredate < '81/12/31'; -- 날짜 걸림 : date
 
-
--- where 에서 like 연산자 사용하기   <== 컬럼의 특정 단어를 검색할때 사용 : 게시판, 이름, 글내용, 날짜로 검색
-  -- 문자열의 단어를 검색할때 사용  
-    -- 와일드 카드 식별자 사용 : % 어떤 글자가 와도 상관없다.
-
+--where 에서 Like 연산자 사용하기    <== 컬럼의 특정 단어를 검색 할때 사용 : 게시판, 이름, 글내용, 날짜로 검색 
+    -- 문자열의 단어를 검색할때 사용 
+     -- 와일드 카드 식별자 사용 : %  어떤글자가 와도 상관없다. 
 
 -- 이름이 A로 시작되는 사원을 검색
 select *
@@ -189,7 +182,6 @@ where hiredate like '81%';
 select *
 from employee
 where job like '%AG%';
-
 
 /*중복을 제거해서 출력하기 : distinct, 다른 컬럼이 지정되면 오류 발생, 단일 컬럼에서 사용*/
 
@@ -217,7 +209,6 @@ from employee
 order by eno asc;
 
 --최근 입사한 순서대로 출력 하라.
-
 select *
 from employee
 order by hiredate desc;
@@ -257,7 +248,6 @@ where commission is null;
 
 -- where 컬럼명 between A and B : A 이상 B이하
 -- 월급이 1500 이상 3000 이하인 사원명, 직책, 월급(급여), 입사일을 출력하되 최근 입사한 사용자로 정렬하여 출력
-
 select *
 from employee
 where salary >=1500 and salary <=3000
@@ -268,12 +258,11 @@ from employee
 where salary between 1500 and 3000
 order by hiredate desc;
 
-/*레코드 갯수 출력 : count     <== 게시판에서 DB 전체 레코드 수를 가져와서 페이징 처리를 하기 위해서 사용*/   
+/*레코드 갯수 출력 : count   <== 게시판에서 DB 전체 레코드 수를 가져와서 페이징 처리를 하기 위해서 사용*/   
 -- count 함수는 null을 카운트 하지 않는다.
 -- 특정 컬럼의 평균을 구할때, null 을 카운트 할지 카운트 하지 않을지를 지정해야 한다.
 
 -- count(*) : 전체 레코드수를 출력
-
 select count(*) as "전체 레코드수"
 from employee;
 
